@@ -28,7 +28,7 @@ print("Will use tool '%s'" % (tool.get_name()))
 langs = tool.get_available_languages()
 print("Available languages: %s" % ", ".join(langs))
 
-def get_pos():
+def get_pos() -> tuple:
     '''docstring
     pyautoguiを使用してスクリーンショットのための座標の取得\n
     ３秒ごとに左上と右下の座標を取得する
@@ -50,16 +50,16 @@ def get_pos():
     x2 -= x1
     y2 -= y1
 
-    return(x1, y1, x2, y2)
+    return (x1, y1, x2, y2)
 
-def screen_shot(x1, y1, x2, y2):
+def screen_shot(x1, y1, x2, y2) -> None:
     '''docstring
     pyautoguiを使用して指定した場所のスクリーンショットを取得して保存する
     '''
     sc = pyautogui.screenshot(region=(x1, y1, x2, y2))  # get_pos関数で取得した座標を使用
     sc.save('tmp/ocr_actor.jpg')
 
-def ocr_actors():
+def ocr_actors() -> None:
     '''docstring
     保存した画像から文字認識を行う\n
     現状認識した文字をすべて表示している
