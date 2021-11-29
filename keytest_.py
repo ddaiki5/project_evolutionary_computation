@@ -67,9 +67,10 @@ class KeyOutputList(object):
             if(t2-t1>t):
                 break
 
-time.sleep(2)
-KOLtest = KeyOutputList()
-chromo = np.random.randint(0, 21, (5, 10))
-KOLtest.read_gene(chromo[0])
-KOLtest.print_keylist()
-KOLtest.output()
+
+# time.sleep(2)
+# KOLtest = KeyOutputList()
+# chromo = np.random.randint(0, 21, (5, 10))
+# KOLtest.read_gene(chromo[0])
+# KOLtest.print_keylist()
+# KOLtest.output()

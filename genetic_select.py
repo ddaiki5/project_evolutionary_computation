@@ -59,7 +59,7 @@ def mutate(chromo):
         new_chromo = list()
         for j in range(chromo_length):
             if random.random()<=0.005:#0.5%で遺伝子変異
-                new_chromo.append(random.randint(0,21))
+                new_chromo.append(random.randint(0,20))
             else:
                 new_chromo.append(chromo[i][j])
         mutated_chromo.append(new_chromo)

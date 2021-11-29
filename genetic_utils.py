@@ -22,14 +22,14 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
     children_chromo : np.ndarray
         子の染色体配列を含む遺伝子の二次元配列
     '''
-    p_size, choromo_length = chromo.shape
+    p_size, chromo_length = chromo.shape
     children_chromo = list()
     # 二点交叉
     counter = 0
     end = int(p_size*alpha)
     while counter<end:
-        sp1 = random.randint(0, choromo_length-1)
-        sp2 = random.randint(sp1, choromo_length)
+        sp1 = random.randint(0, chromo_length-1)
+        sp2 = random.randint(sp1, chromo_length)
         for pair in itertools.combinations(parents, 2):
             c1 = pair[0].copy()
             c2 = pair[1].copy()
@@ -44,7 +44,7 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
     # 一様交叉   
     end = p_size
     while counter<end:
-        mask = np.random.randint(0, 2, (choromo_length))
+        mask = np.random.randint(0, 2, (chromo_length))
         for pair in itertools.combinations(parents, 2):
             c1 = pair[0].copy()
             c2 = pair[1].copy()
@@ -69,10 +69,11 @@ def evaluate(ocr) -> float:
     '''
 
     txt = ocr.ocr_actors()
-
+    print("txt ", txt)
     # 正規表現で符号あり0省略なしでマッチする
     m = re.search(r'[+-]?\d+(?:\.\d+)?', txt)
-    result = m.group()
+    result = m.group() 
+    print(result)
     return float(result)
 
 
@@ -85,10 +86,10 @@ def load_genetic_param(generation) -> np.ndarray:
     
 
 if __name__ == "__main__":
-    chromo = np.random.randint(0, 21, (100, 100))
-    fitness = np.zeros(100)
-    parents = chromo[0:5]
-    new_chromo = crossover(chromo, parents, alpha=0.5)
-    save_genetic_param(chromo, fitness, 1)
-    print(load_genetic_param(1))
+    # chromo = np.random.randint(0, 21, (100, 100))
+    # fitness = np.zeros(100)
+    # parents = chromo[0:5]
+    # new_chromo = crossover(chromo, parents, alpha=0.5)
+    # save_genetic_param(chromo, fitness, 1)
+    print(load_genetic_param(0))
 

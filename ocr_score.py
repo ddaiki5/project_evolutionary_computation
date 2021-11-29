@@ -71,6 +71,58 @@ def ocr_actors() -> None:
     ) 
     print(txt)
 
+class Ocr:
+    def __init__(self):
+        self.pos = get_pos()
+
+    @classmethod
+    def get_pos() -> tuple:
+        '''
+        pyautoguiを使用してスクリーンショットのための座標の取得\n
+        ３秒ごとに左上と右下の座標を取得する
+        '''
+
+        # 3秒待ってからカーソル位置の座標を取得
+        print("左上隅の座標を取得します")
+        sleep(3)
+        x1, y1 = pyautogui.position()
+        print(str(x1) + "," + str(y1))
+
+        # 3秒待ってからカーソル位置の座標を取得
+        print("右下隅の座標を取得します")
+        sleep(3)
+        x2, y2 = pyautogui.position()
+        print(str(x2) + "," + str(y2))
+
+        # PyAutoGuiのregionの仕様のため、相対座標を求める
+        x2 -= x1
+        y2 -= y1
+
+        return (x1, y1, x2, y2)
+
+    def _screen_shot(self) -> None:
+        '''docstring
+        pyautoguiを使用して指定した場所のスクリーンショットを取得して保存する
+        '''
+        sc = pyautogui.screenshot(region=self.pos)  # get_pos関数で取得した座標を使用
+        sc.save('tmp/ocr_actor.jpg')
+
+    def _exec_ocr(self) -> str:
+        '''
+        保存した画像から文字認識を行う
+        現状認識した文字をすべて表示している
+        '''
+        txt = tool.image_to_string(
+            Image.open('tmp/ocr_actor.jpg'),
+            lang="eng",
+            builder=pyocr.builders.TextBuilder(tesseract_layout=6)
+        ) 
+        return txt
+    
+    def ocr_actors(self):
+        self._screen_shot()
+        txt = self._exec_ocr()
+        return txt
 
 if __name__ == "__main__":
     x1, y1, x2, y2 = get_pos()
