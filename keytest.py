@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import numpy as np
 """
 KeyoutputList クラス
 キーボード出力のためのクラス
@@ -17,7 +18,19 @@ KeyoutputList クラス
 
 ・output(self)
     キー出力をkeylistに従って行う
+
+
+0,1,2:noneの0.1,0.5,0.8
+3,4,5:Qの0.1,0.5,0.8
+6,7,8:Wの...
+9,10,11:O
+12,13,14:P
+15,16,17:Q+P
+18,19,20:W+O
 """
+
+SECLIST = (0.1, 0.5, 0.8)
+WORDLIST = (['none'], ['q'], ['w'], ['o'], ['p'], ['q','p'], ['w','o'])
 
 class KeyOutputList(object):
     def __init__(self):
@@ -30,6 +43,13 @@ class KeyOutputList(object):
         for sentence in text:
             self.keylist.append(sentence.split(','))
             self.keylist[-1][-1] = float(self.keylist[-1][-1])
+
+    def read_gene(self, gene):
+        for genome in gene:
+            newkeylist = list()
+            newkeylist.extend(WORDLIST[genome//3])
+            newkeylist.append(SECLIST[genome%3])
+            self.keylist.append(newkeylist)
 
     def print_keylist(self):
         print(self.keylist)
@@ -45,6 +65,7 @@ class KeyOutputList(object):
 
 time.sleep(2)
 KOLtest = KeyOutputList()
-KOLtest.read_keylist('test.txt')
+chromo = np.random.randint(0, 21, (5, 10))
+KOLtest.read_gene(chromo[0])
 KOLtest.print_keylist()
 KOLtest.output()
