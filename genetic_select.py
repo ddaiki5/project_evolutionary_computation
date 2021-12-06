@@ -47,7 +47,7 @@ def mutate(chromo):
     Retuens
     ----------
     mutated_parents : np.ndarray
-        突然変異済みの染色体配列を含む遺伝子の二次元配列
+        突然変異済みの染色体配列を含む遺q伝子の二次元配列
     '''
     random.seed()
     p_size, chromo_length = chromo.shape
@@ -58,7 +58,7 @@ def mutate(chromo):
             continue
         new_chromo = list()
         for j in range(chromo_length):
-            if random.random()<=0.005:#0.5%で遺伝子変異
+            if random.random()<=0.010:#0.5%で遺伝子変異
                 new_chromo.append(random.randint(0,20))
             else:
                 new_chromo.append(chromo[i][j])
