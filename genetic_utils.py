@@ -25,7 +25,8 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
     p_size, chromo_length = chromo.shape
     children_chromo = list()
     # 二点交叉
-    counter = 0
+    children_chromo.extend(parents)
+    counter = 5
     end = int(p_size*alpha)
     while counter<end:
         sp1 = random.randint(0, chromo_length-1)
@@ -56,7 +57,7 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
                 break
             children_chromo.append(c2)
             counter += 1   
-    return np.array(children_chromo)
+    return np.array(children_chromo[:100])
 
 def evaluate(ocr) -> float:
     '''
@@ -69,7 +70,7 @@ def evaluate(ocr) -> float:
     '''
 
     txt = ocr.ocr_actors()
-    print("txt ", txt)
+    #print("txt ", txt)
     # 正規表現で符号あり0省略なしでマッチする
     m = re.search(r'[+-]?\d+(?:\.\d+)?', txt)
     result = m.group() 
@@ -78,18 +79,24 @@ def evaluate(ocr) -> float:
 
 
 def save_genetic_param(chromo, fitness, generation) -> None:
-    np.savez("param/chromo_gen{}.npz".format(generation), c=chromo, f=fitness)
+    np.savez("param/chromo_gen_uniform{}.npz".format(generation), c=chromo, f=fitness)
 
 def load_genetic_param(generation) -> np.ndarray:
-    npzfile = np.load("param/chromo_gen{}.npz".format(generation))
+    npzfile = np.load("param/chromo_gen_uniform{}.npz".format(generation))
     return npzfile["c"], npzfile["f"]
     
 
 if __name__ == "__main__":
     # chromo = np.random.randint(0, 21, (100, 100))
+    # parents = chromo = np.random.randint(0, 21, (5, 100))
+    # c = list()
+    # c.extend(parents)
+    # print(len(c))
     # fitness = np.zeros(100)
     # parents = chromo[0:5]
     # new_chromo = crossover(chromo, parents, alpha=0.5)
     # save_genetic_param(chromo, fitness, 1)
-    print(load_genetic_param(0))
+    #print(load_genetic_param(0))
+    _, fitness = load_genetic_param(10)
+    print(fitness)
 
