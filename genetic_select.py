@@ -17,8 +17,9 @@ def roulette_select(chromo, fitness):
     parents : np.ndarray
         親の染色体配列を含む遺伝子の二次元配列
     '''
-    fit_sort = np.sort(fitness)#昇順にソート
-    fit_argsort = np.argsort(fitness)#昇順にソートした際のインデックス
+    cubed_fitness = np.power(fitness, 3)
+    fit_sort = np.sort(cubed_fitness)#昇順にソート
+    fit_argsort = np.argsort(cubed_fitness)#昇順にソートした際のインデックス
     fit_sort = np.where(fit_sort<0,0,fit_sort)#0未満を0に置換
     parents = list()
 
