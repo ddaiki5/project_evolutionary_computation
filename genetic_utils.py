@@ -67,15 +67,16 @@ def evaluate(ocr) -> float:
     ----------
     ocr : Ocr instance
         画像文字認識を行う
+    
+    Retuens
+    ----------
+    score : float
+        到達した距離
     '''
 
-    txt = ocr.ocr_actors()
-    #print("txt ", txt)
-    # 正規表現で符号あり0省略なしでマッチする
-    m = re.search(r'[+-]?\d+(?:\.\d+)?', txt)
-    result = m.group() 
-    print(result)
-    return float(result)
+    score = ocr.ocr_actors()
+    print("Score: ", score)
+    return score
 
 
 def save_genetic_param(chromo, fitness, generation) -> None:
