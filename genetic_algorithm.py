@@ -19,8 +19,14 @@ def run_generation(chromo, generation):
         KOLtest.output(5.0)
         fitness[i] = evaluate(ocr)
         pyautogui.press('r')
+        pyautogui.press('q')
+        pyautogui.press('w')
+        pyautogui.press('o')
+        pyautogui.press('p')
+        pyautogui.press('r')
         time.sleep(1)
     save_genetic_param(chromo, fitness, generation)
+    print("fitness 最大:{} 平均{}".format(np.amax(fitness), np.average(fitness)))
     parents = roulette_select(chromo, fitness)
     new_chromo = crossover(chromo, parents, alpha=0.5)
     chromo = mutate(new_chromo)
@@ -34,34 +40,31 @@ def load_generation(gen):
     return chromo
 
 
-if __name__ == '__main__':
-    chromo = load_generation(0)
+def run(gen):
+    chromo, fitness = load_genetic_param(gen)
+    #ocr = Ocr()
+    #max_gen = 100 
+    print("-------------------")
+    print("{}世代　Start".format(gen))
+    chromo = run_generation(chromo, gen)
+    print("-------------------")
+
+def train():
+    chromo = load_generation(53)
     #染色体　遺伝子100×一世代数100
     #chromo = np.random.randint(0, 21, (100, 100))
     #OCR
-    ocr = Ocr()
+    #ocr = Ocr()
     max_gen = 100
-    for i in range(1, max_gen): 
+    for i in range(54, max_gen): 
         print("-------------------")
-        print("{}世代　Start", format(i))
+        print("{}世代　Start".format(i))
         chromo = run_generation(chromo, i)
         print("-------------------")
 
 
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    ocr = Ocr()
+    train()
     
 
