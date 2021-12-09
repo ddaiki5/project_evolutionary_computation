@@ -17,24 +17,25 @@ def roulette_select(chromo, fitness):
     parents : np.ndarray
         親の染色体配列を含む遺伝子の二次元配列
     '''
-    cubed_fitness = np.power(fitness, 3)
-    fit_sort = np.sort(cubed_fitness)#昇順にソート
-    fit_argsort = np.argsort(cubed_fitness)#昇順にソートした際のインデックス
-    fit_sort = np.where(fit_sort<0,0,fit_sort)#0未満を0に置換
+    cubed_fitness = np.power(fitness, 3)#スコアの3乗
+    fit_arg = np.array(range(cubed_fitness.size))
+    cubed_fitness = np.where(cubed_fitness<0,0,cubed_fitness)#0未満を0に置換
     parents = list()
 
+
+
     for p in range(5):#ルーレット選択を5回
-        fit_prob = fit_sort/np.sum(fit_sort)
+        fit_prob = cubed_fitness/np.sum(cubed_fitness)
         for i in range(fit_prob.size-1):#確率の累積和をとる
             fit_prob[i+1] += fit_prob[i]
         random.seed()
         r = random.random()
         select = np.count_nonzero(fit_prob < r)
-        parents.append(chromo[fit_argsort[select]])
-        fit_sort = np.delete(fit_sort,select)
-        fit_argsort = np.delete(fit_argsort,select)
+        parents.append(chromo[fit_arg[select]])
+        cubed_fitness = np.delete(cubed_fitness,select)
+        fit_arg = np.delete(fit_arg,select)
 
-    return np.array(parents)
+    return np.array(parents)#選ばれた5つを親として返す
 
 def mutate(chromo):
     '''
@@ -48,7 +49,7 @@ def mutate(chromo):
     Retuens
     ----------
     mutated_parents : np.ndarray
-        突然変異済みの染色体配列を含む遺q伝子の二次元配列
+        突然変異済みの染色体配列を含む遺伝子の二次元配列
     '''
     random.seed()
     p_size, chromo_length = chromo.shape
@@ -59,7 +60,7 @@ def mutate(chromo):
             continue
         new_chromo = list()
         for j in range(chromo_length):
-            if random.random()<=0.010:#0.5%で遺伝子変異
+            if random.random()<=0.008:#0.8%で遺伝子変異
                 new_chromo.append(random.randint(0,20))
             else:
                 new_chromo.append(chromo[i][j])
@@ -67,10 +68,10 @@ def mutate(chromo):
 
     return np.array(mutated_chromo)
 
-
+#以下テスト用
 if __name__ == "__main__":
-    chromo = np.random.randint(0, 21, (100, 100))
-    fitness = np.random.uniform(0.0, 10.0, 100)
+    chromo = np.random.randint(0, 21, (10, 10))
+    fitness = np.random.uniform(0.0, 10.0, 10)
     print(chromo)
     print(fitness)
     print(roulette_select(chromo, fitness))
