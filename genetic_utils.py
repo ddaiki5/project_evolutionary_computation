@@ -1,7 +1,7 @@
+# 新谷担当
 import numpy as np
 import itertools
 import random
-import re
 from ocr_score import Ocr
 
 def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
@@ -24,11 +24,13 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
     '''
     p_size, chromo_length = chromo.shape
     children_chromo = list()
-    # 二点交叉
-    children_chromo.extend(parents)
+    children_chromo.extend(parents) #親は次の世代に入る
     counter = 5
+
+    # 二点交叉
     end = int(p_size*alpha)
     while counter<end:
+        # ランダムな2点選択
         sp1 = random.randint(0, chromo_length-1)
         sp2 = random.randint(sp1, chromo_length)
         for pair in itertools.combinations(parents, 2):
@@ -45,6 +47,7 @@ def crossover(chromo, parents, alpha=0.5) -> np.ndarray:
     # 一様交叉   
     end = p_size
     while counter<end:
+        # ランダムなマスクを作成
         mask = np.random.randint(0, 2, (chromo_length))
         for pair in itertools.combinations(parents, 2):
             c1 = pair[0].copy()
@@ -80,24 +83,20 @@ def evaluate(ocr) -> float:
 
 
 def save_genetic_param(chromo, fitness, generation) -> None:
-    np.savez("param/chromo_gen_uniform{}.npz".format(generation), c=chromo, f=fitness)
+    '''
+    染色体と適応度のパラメータを保存
+    '''
+    np.savez("param/chromo_gen_re{}.npz".format(generation), c=chromo, f=fitness)
 
 def load_genetic_param(generation) -> np.ndarray:
-    npzfile = np.load("param/chromo_gen_uniform{}.npz".format(generation))
+    '''
+    指定した世代の染色体と適応度のパラメータを取得
+    '''
+    npzfile = np.load("param/chromo_gen_re{}.npz".format(generation))
     return npzfile["c"], npzfile["f"]
     
 
 if __name__ == "__main__":
-    # chromo = np.random.randint(0, 21, (100, 100))
-    # parents = chromo = np.random.randint(0, 21, (5, 100))
-    # c = list()
-    # c.extend(parents)
-    # print(len(c))
-    # fitness = np.zeros(100)
-    # parents = chromo[0:5]
-    # new_chromo = crossover(chromo, parents, alpha=0.5)
-    # save_genetic_param(chromo, fitness, 1)
-    #print(load_genetic_param(0))
-    _, fitness = load_genetic_param(10)
+    # テスト用
+    _, fitness = load_genetic_param(27)
     print(fitness)
-
