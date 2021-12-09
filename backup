@@ -1,0 +1,85 @@
+def get_pos() -> tuple:
+    '''docstring
+    pyautoguiを使用してスクリーンショットのための座標の取得\n
+    ３秒ごとに左上と右下の座標を取得する
+    '''
+
+    # 3秒待ってからカーソル位置の座標を取得
+    print("左上隅の座標を取得します")
+    sleep(3)
+    x1, y1 = pyautogui.position()
+    print(str(x1) + "," + str(y1))
+
+    # 3秒待ってからカーソル位置の座標を取得
+    print("右下隅の座標を取得します")
+    sleep(3)
+    x2, y2 = pyautogui.position()
+    print(str(x2) + "," + str(y2))
+
+    # PyAutoGuiのregionの仕様のため、相対座標を求める
+    x2 -= x1
+    y2 -= y1
+
+    return (x1, y1, 640, 400)
+
+def screen_shot(x1, y1, x2, y2) -> None:
+    '''docstring
+    pyautoguiを使用して指定した場所のスクリーンショットを取得して保存する
+    '''
+    sc = pyautogui.screenshot(region=(x1, y1, x2, y2))  # get_pos関数で取得した座標を使用
+    sc.crop((200, 15, 415, 55)).save('tmp/ocr_actor1.jpg')
+    sc.crop((250, 185, 385, 215)).save('tmp/ocr_actor2.jpg')
+
+    
+
+def ocr_actors() -> None:
+    '''docstring
+    保存した画像から文字認識を行う\n
+    現状認識した文字をすべて表示している
+    '''
+    txt = tool.image_to_string(
+        Image.open('tmp/ocr_actor.jpg'),
+        lang="eng",
+        builder=pyocr.builders.TextBuilder(tesseract_layout=6)
+    ) 
+    print(txt)
+
+def ocr_score_finish():
+    sc = pyautogui.screenshot(region=(611, 359, 195, 40))  # get_pos関数で取得した座標を使用
+    sc.save('tmp/ocr_actor1.jpg')
+    txt = tool.image_to_string(
+    Image.open('tmp/ocr_actor1.jpg'),
+        lang="eng",
+        builder=pyocr.builders.TextBuilder(tesseract_layout=6)
+        )
+    m = re.search(r'[+-]?\d+(?:\.\d+)?', txt)
+    result = m.group()
+    #print(result)
+
+
+    txt = tool.image_to_string(
+        Image.open('tmp/ocr_actor.jpg'),
+        lang="eng",
+        builder=pyocr.builders.TextBuilder(tesseract_layout=6)
+    ) 
+    #print(txt)
+    m = re.search(r'[+-]?\d+(?:\.\d+)?', txt)
+    try:
+        result1 = m.group()
+    except Exception as e:
+        print("except", result)
+        return float(result)
+    else:
+        print(result, result1)
+        if abs(float(result1)-float(result)) < 1.5:
+            return float(result1)
+        else:
+            return float(result)
+
+
+def is_float(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
