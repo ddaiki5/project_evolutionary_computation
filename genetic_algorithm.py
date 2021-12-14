@@ -1,4 +1,3 @@
-# 新谷担当
 import numpy as np
 import time
 from keytest_ import KeyOutputList
