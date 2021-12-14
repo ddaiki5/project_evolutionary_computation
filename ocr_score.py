@@ -1,4 +1,3 @@
-# 新谷担当
 import sys
 import os
 import pyocr
